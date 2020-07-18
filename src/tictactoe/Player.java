@@ -19,13 +19,13 @@ public abstract class Player {
                 player = new HumanPlayer(symbol, s);
                 break;
             case "easy":
-                player = new AIPlayer(symbol, Difficulty.EASY);
+                player = new EasyAIPlayer(symbol);
                 break;
             case "medium":
-                player = new AIPlayer(symbol, Difficulty.MEDIUM);
+                player = new MediumAIPlayer(symbol);
                 break;
             case "hard":
-                player = new AIPlayer(symbol, Difficulty.HARD);
+                player = new HardAIPlayer(symbol);
                 break;
             default:
                 throw new IllegalStateException("Unexpected value: " + type);
