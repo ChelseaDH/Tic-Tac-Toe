@@ -110,22 +110,6 @@ public class Board {
         }
     }
 
-    // Removes the symbol from a given cell
-    private void removeCell(int index1, int index2) {
-        // Remove player count
-        switch (this.cells[index1][index2]) {
-            case 'X':
-                this.noXs--;
-                break;
-            case 'O':
-                this.noOs--;
-                break;
-        }
-
-        // Set the cell to have no symbol
-        setCell(index1, index2, ' ');
-    }
-
     // Checks if a cell in the board is already occupied
     boolean isOccupied(int x, int y) {
         return this.cells[x][y] == 'X' || this.cells[x][y] == 'O';
