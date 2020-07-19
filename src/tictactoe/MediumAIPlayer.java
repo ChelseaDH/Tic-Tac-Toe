@@ -20,13 +20,13 @@ public class MediumAIPlayer extends AIPlayer{
             // Check if the player can win - make that move
             for (WinningState winningState : winningStates) {
                 if (winningState.symbol == this.symbol) {
-                    board.setCell(winningState.index1, winningState.index2, this.symbol);
+                    board.setCell(winningState.p, this.symbol);
                     return;
                 }
             }
 
             // If not, block the first win of the possible wins
-            board.setCell(winningStates.get(0).index1, winningStates.get(0).index2, this.symbol);
+            board.setCell(winningStates.get(0).p, this.symbol);
         }
     }
 }

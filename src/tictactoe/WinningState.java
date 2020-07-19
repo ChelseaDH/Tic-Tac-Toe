@@ -1,13 +1,11 @@
 package tictactoe;
 
 public class WinningState {
+    Point p;
     char symbol;
-    int index1;
-    int index2;
 
-    WinningState(char symbol, int index1, int index2) {
+    WinningState(Point p, char symbol) {
+        this.p = p;
         this.symbol = symbol;
-        this.index1 = index1;
-        this.index2 = index2;
     }
 }

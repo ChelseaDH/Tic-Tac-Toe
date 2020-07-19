@@ -22,13 +22,13 @@ public abstract class AIPlayer extends Player {
 
     protected void makeRandomMove(Board board) {
         Random random = new Random(System.currentTimeMillis());
-        int index1, index2;
+        Point p = new Point();
         do {
-            index1 = random.nextInt(board.boardSize);
-            index2 = random.nextInt(board.boardSize);
-        } while (board.isOccupied(index1, index2));
+            p.x = random.nextInt(board.boardSize);
+            p.y = random.nextInt(board.boardSize);
+        } while (board.isOccupied(p));
 
         // Set the cell
-        board.setCell(index1, index2, this.symbol);
+        board.setCell(p, this.symbol);
     }
 }

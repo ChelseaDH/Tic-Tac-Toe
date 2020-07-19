@@ -61,7 +61,7 @@ public class Board {
 
     // Adds a new cell into the board
     public void addCell(int coord1, int coord2, char symbol) {
-        int index1 = 0, index2 = 0;
+        Point p = new Point();
 
         // Check that coordinates are in range
         if (coord1 < 1 || coord1 > 3 || coord2 < 1 || coord2 > 3) {
@@ -71,33 +71,33 @@ public class Board {
         // Change coordinates into array indices
         switch (coord1) {
             case 2:
-                index2 = 1;
+                p.y = 1;
                 break;
             case 3:
-                index2 = 2;
+                p.y = 2;
                 break;
         }
 
         switch (coord2) {
             case 1:
-                index1 = 2;
+                p.x = 2;
                 break;
             case 2:
-                index1 = 1;
+                p.x = 1;
                 break;
         }
 
         // Check if the board is already occupied at those indices
-        if (this.isOccupied(index1, index2)) {
+        if (this.isOccupied(p)) {
             throw new IllegalArgumentException("This cell is occupied! Choose another one!");
         }
 
         // Set the cell
-        setCell(index1, index2, symbol);
+        setCell(p, symbol);
     }
 
-    void setCell(int index1, int index2, char symbol) {
-        this.cells[index1][index2] = symbol;
+    void setCell(Point p, char symbol) {
+        this.cells[p.x][p.y] = symbol;
 
         // Add to the player count
         switch (symbol) {
@@ -111,8 +111,8 @@ public class Board {
     }
 
     // Checks if a cell in the board is already occupied
-    boolean isOccupied(int x, int y) {
-        return this.cells[x][y] == 'X' || this.cells[x][y] == 'O';
+    boolean isOccupied(Point p) {
+        return this.cells[p.x][p.y] != ' ';
     }
 
     // Check for wins in rows, columns, and diagonals
@@ -143,29 +143,44 @@ public class Board {
     // Or null if win not possible
     public List<WinningState> cellsToWinNextTurn() {
         List<WinningState> winners = new ArrayList<>();
+        Point p;
 
         for (int i = 0; i < 3; i++) {
             // Check for possible wins in rows
-            if (this.cells[i][0] == this.cells[i][1] && !isOccupied(i, 2)) {winners.add(new WinningState(this.cells[i][0], i, 2));}
-            if (this.cells[i][0] == this.cells[i][2] && !isOccupied(i, 1)) {winners.add(new WinningState(this.cells[i][0], i, 1));}
-            if (this.cells[i][1] == this.cells[i][2] && !isOccupied(i, 0)) {winners.add(new WinningState(this.cells[i][1], i, 0));}
+            if (this.cells[i][0] == this.cells[i][1] && !isOccupied(p = new Point(i, 2))) {winners.add(new WinningState(p, this.cells[i][0]));}
+            if (this.cells[i][0] == this.cells[i][2] && !isOccupied(p = new Point(i, 1))) {winners.add(new WinningState(p, this.cells[i][0]));}
+            if (this.cells[i][1] == this.cells[i][2] && !isOccupied(p = new Point(i, 0))) {winners.add(new WinningState(p, this.cells[i][1]));}
 
             // Check for possible wins in columns
-            if (this.cells[0][i] == this.cells[1][i] && !isOccupied(2, i)) {winners.add(new WinningState(this.cells[0][i], 2, i));}
-            if (this.cells[0][i] == this.cells[2][i] && !isOccupied(1, i)) {winners.add(new WinningState(this.cells[0][i], 1, i));}
-            if (this.cells[1][i] == this.cells[2][i] && !isOccupied(0, i)) {winners.add(new WinningState(this.cells[1][i], 0, i));}
+            if (this.cells[0][i] == this.cells[1][i] && !isOccupied(p = new Point(2, i))) {winners.add(new WinningState(p, this.cells[0][i]));}
+            if (this.cells[0][i] == this.cells[2][i] && !isOccupied(p = new Point(1, i))) {winners.add(new WinningState(p, this.cells[0][i]));}
+            if (this.cells[1][i] == this.cells[2][i] && !isOccupied(p = new Point(0, i))) {winners.add(new WinningState(p, this.cells[1][i]));}
         }
 
         // Check for possible wins in main diagonal
-        if (this.cells[0][0] == this.cells[1][1] && !isOccupied(2, 2)) {winners.add(new WinningState(this.cells[0][0], 2, 2));}
-        if (this.cells[0][0] == this.cells[2][2] && !isOccupied(1, 1)) {winners.add(new WinningState(this.cells[0][0], 1, 1));}
-        if (this.cells[1][1] == this.cells[2][2] && !isOccupied(0, 0)) {winners.add(new WinningState(this.cells[1][1], 0, 0));}
+        if (this.cells[0][0] == this.cells[1][1] && !isOccupied(p = new Point(2, 2))) {winners.add(new WinningState(p, this.cells[0][0]));}
+        if (this.cells[0][0] == this.cells[2][2] && !isOccupied(p = new Point(1, 1))) {winners.add(new WinningState(p, this.cells[0][0]));}
+        if (this.cells[1][1] == this.cells[2][2] && !isOccupied(p = new Point(0, 0))) {winners.add(new WinningState(p, this.cells[1][1]));}
 
         // Check for possible wins in side diagonal
-        if (this.cells[0][2] == this.cells[1][2] && !isOccupied(2, 0)) {winners.add(new WinningState(this.cells[0][2], 2, 0));}
-        if (this.cells[0][2] == this.cells[2][0] && !isOccupied(1, 2)) {winners.add(new WinningState(this.cells[0][2], 1, 2));}
-        if (this.cells[1][2] == this.cells[2][0] && !isOccupied(0, 2)) {winners.add(new WinningState(this.cells[1][2], 0, 2));}
+        if (this.cells[0][2] == this.cells[1][2] && !isOccupied(p = new Point(2, 0))) {winners.add(new WinningState(p, this.cells[0][2]));}
+        if (this.cells[0][2] == this.cells[2][0] && !isOccupied(p = new Point(1, 2))) {winners.add(new WinningState(p, this.cells[0][2]));}
+        if (this.cells[1][2] == this.cells[2][0] && !isOccupied(p = new Point(0, 2))) {winners.add(new WinningState(p, this.cells[1][2]));}
 
         return winners;
+    }
+
+    public List<Point> getEmptyCells() {
+        List<Point> empty = new ArrayList<>();
+
+        for (int i = 0; i < boardSize; i++) {
+            for (int j = 0; j < boardSize; j++) {
+                Point e = new Point(i, j);
+                if (!isOccupied(e)) {
+                    empty.add(e);
+                }
+            }
+        }
+        return empty;
     }
 }
