@@ -27,13 +27,28 @@ public class Board {
             System.exit(0);
         }
 
-        if (commands.length == 3 && commands[0].equals("start")
-                && (commands[1].equals("user") || commands[1].equals("easy") || commands[1].equals("medium"))
-                && (commands[2].equals("user") || commands[2].equals("easy") || commands[2].equals("medium"))) {
+        // Start command must be followed by 2 further commands denoting the player type
+        // If any part of the input is incorrect - throw IllegalArgumentException
+        if (commands.length == 3 && commands[0].equals("start")) {
+            for (int i = 1; i < commands.length; i++) {
+                if (!commands[i].equals("user") && !isValidDifficulty(commands[i])) {
+                    throw new IllegalArgumentException("Bad parameters!");
+                }
+            }
             return commands;
         } else {
             throw new IllegalArgumentException("Bad parameters!");
         }
+    }
+
+    // Checks if a given input matches a Difficulty option
+    private boolean isValidDifficulty(String input) {
+        for (Difficulty d: Difficulty.values()) {
+            if (input.equals(d.name().toLowerCase())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public void printBoard() {
